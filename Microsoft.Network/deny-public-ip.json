@@ -1,24 +1,17 @@
 {
-    "properties": {
-        "displayName": "Deny Public IP Address",
-        "description": "Prevents creation of Network Interface with Public IP Address",
-        "mode": "Indexed",
-        "policyRule": {
-            "if": {
-              "allOf": [
-                {
-                  "field": "type",
-                  "equals": "Microsoft.Network/networkInterfaces"
-                },
-                {
-                  "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].publicIpAddress.id",
-                  "exists": true
-                }
-              ]
-            },
-            "then": {
-              "effect": "deny"
-            }
-          }
-    }
+  "if": {
+    "allOf": [
+      {
+        "field": "type",
+        "equals": "Microsoft.Network/networkInterfaces"
+      },
+      {
+        "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].publicIpAddress.id",
+        "exists": true
+      }
+    ]
+  },
+  "then": {
+    "effect": "deny"
+  }
 }
