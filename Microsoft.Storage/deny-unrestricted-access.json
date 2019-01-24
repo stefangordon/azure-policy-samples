@@ -1,0 +1,25 @@
+{
+    "properties": {
+        "displayName": "Deny unrestricted network access to storage accounts",
+        "description": "Deny unrestricted network access in your storage account firewall settings. Instead, configure network rules so only applications from allowed networks can access the storage account. To allow connections from specific internet or on-premise clients, access can be granted to traffic from specific Azure virtual networks or to public internet IP address ranges",
+        "mode": "All",
+        "parameters": {},
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Storage/storageAccounts"
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                "equals": "Allow"
+              }
+            ]
+          },
+          "then": {
+            "effect": "deny"
+          }
+        }
+    }
+}
