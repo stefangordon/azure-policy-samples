@@ -2,10 +2,16 @@
 Azure Policy samples I put together which may be useful to others.
 
 ## For defining a policy in a subscription
+
+```
 armclient PUT "/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/policyDefinitions/AuditStorageAccounts?api-version=2016-12-01" @<path to policy definition JSON file>
+```
 
 ## For defining a policy in a management group
+
+```
 armclient PUT "/providers/Microsoft.Management/managementgroups/{managementGroupId}/providers/Microsoft.Authorization/policyDefinitions/AuditStorageAccounts?api-version=2016-12-01" @<path to policy definition JSON file>
+```
 
 ## Force an on-demand policy evaluation
 Use ARM client with the command below to scan an specific resource group.  
