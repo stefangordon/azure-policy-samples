@@ -1,0 +1,32 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "testName": {
+            "type": "string",
+            "defaultValue": "insecure-transfer-allowed"
+        }
+    },
+    "variables": {
+        "nameSeed": "[concat(resourceGroup().id, parameters('testName'))]",
+        "storageAccountName": "[take(uniqueString(variables('nameSeed')), 24)]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "networkAcls": {
+                    "defaultAction": "Allow"
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
