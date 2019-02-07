@@ -11,8 +11,7 @@ class PolicyModule(ModuleBase):
 
     def deploy(self, policy_path, management_group_id):
         try:
-            current_working_dir = os.path.abspath(os.path.dirname(__file__))
-            policy_path = os.path.join(current_working_dir, policy_path)
+            policy_path = os.path.join(os.getcwd(), policy_path)
             policy_name = os.path.splitext(os.path.basename(policy_path))[0]
             policy_definition = open(policy_path, 'r').read()
 
