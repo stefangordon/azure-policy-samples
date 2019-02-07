@@ -1,3 +1,4 @@
+import json
 import os
 from module_base import ModuleBase
 from azure.mgmt.resource.policy import PolicyClient
@@ -13,7 +14,8 @@ class PolicyModule(ModuleBase):
         try:
             policy_path = os.path.join(os.getcwd(), policy_path)
             policy_name = os.path.splitext(os.path.basename(policy_path))[0]
-            policy_definition = open(policy_path, 'r').read()
+            policy_text = open(policy_path, 'r').read()
+            policy_definition = json.loads(policy_text)
 
             if management_group_id is None:
                 self.__deploy_definition_to_subscription(policy_name, policy_definition)
