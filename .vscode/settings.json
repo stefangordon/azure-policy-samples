@@ -2,5 +2,7 @@
     "python.pythonPath": ".venv/bin/python",
     "python.linting.enabled": true,
     "python.envFile": "${workspaceFolder}/dev.env",
-    "editor.formatOnSave": true
+    "[python]": {
+        "editor.formatOnSave": true,
+    }
 }
