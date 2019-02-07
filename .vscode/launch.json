@@ -10,7 +10,21 @@
             "request": "launch",
             "program": "tools/deploy.py",
             "console": "integratedTerminal",
-            "args": ["<subid>"]
+            "args": ["<subid>"],
+            "envFile": "${workspaceFolder}/dev.env",
+        },
+        {
+            "name": "Python: test.py",
+            "type": "python",
+            "request": "launch",
+            "program": "tools/test.py",
+            "console": "integratedTerminal",
+            "args": [
+                "<subid>",
+                "definitions/Microsoft.Storage/require-secure-transfer.json"
+            ],
+            "envFile": "${workspaceFolder}/dev.env",
+            "debugStdLib": true
         }
     ]
 }
