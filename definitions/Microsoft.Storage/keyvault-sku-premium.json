@@ -2,7 +2,7 @@
     "properties": {
       "displayName": "key Vault SKU",
       "policyType": "Custom",
-      "description": "Prevents key vaults without premium SKU from being create",
+      "description": "Prevents creation of key vaults without premium SKU",
       "parameters": {
         "keyVaultSKUs": {
           "type": "Array",
