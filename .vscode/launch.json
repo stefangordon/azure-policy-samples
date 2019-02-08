@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: deploy.py",
+            "type": "python",
+            "request": "launch",
+            "program": "tools/deploy.py",
+            "console": "integratedTerminal",
+            "args": ["<subid>"],
+            "envFile": "${workspaceFolder}/dev.env",
+        },
+        {
+            "name": "Python: test.py",
+            "type": "python",
+            "request": "launch",
+            "program": "tools/test.py",
+            "console": "integratedTerminal",
+            "args": [
+                "<subid>",
+                "definitions/Microsoft.Storage/require-secure-transfer.json"
+            ],
+            "envFile": "${workspaceFolder}/dev.env",
+            "debugStdLib": true
+        }
+    ]
+}
