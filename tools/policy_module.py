@@ -11,7 +11,6 @@ class PolicyModule(ModuleBase):
         self.credentials = self.get_credentials()
         self.client = PolicyClient(self.credentials, self.subscription_id)
         self.logger = logging.getLogger(__name__)
-        print(os.getcwd())
 
     def deploy(self, policy_path, management_group_id):
         try:
