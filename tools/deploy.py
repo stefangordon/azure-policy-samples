@@ -4,23 +4,38 @@
 """
 
 from policy_module import PolicyModule
+from policy_map import PolicyMap
 
 import sys
 import argparse
 
+
 def main():
     args = process_arguments()
 
-    # Create Policy Manager Module
-    policy_manager = PolicyModule(args.subscriptionid)
-    policy_manager.deploy(args.policypath, args.managementgroupid)
+    policy_map = PolicyMap(args.map_path, args.definition_path, args.test_path)
+
+    # Iterate over scopes
+    for scope in policy_map.scopes():
+        print("Processing Scope: %s" % scope['name'])
+
+        # Definitions required for this scope
+        for definition in policy_map.definitions(scope['id']):
+            print("Processing Definition: %s" % definition)
+
+        # Assignments required for this scope
+        for assignment in policy_map.assignments(scope['id']):
+            print("Processing Assignment %s with parameters %s" %
+                  (assignment['definition'], assignment['parameters']))
+
 
 def process_arguments():
     parser = argparse.ArgumentParser('deploy')
-    parser.add_argument('subscriptionid', help='A subscription ID')
-    parser.add_argument('policypath', help='Relative path to Azure Policy Definition')
-    parser.add_argument('--managementgroupid', help='Management Group ID', default=None)
+    parser.add_argument('--definition-path', '-d', help='Path to Azure Policy Definitions folder')
+    parser.add_argument('--test-path', '-t', help='Path to Tests folder')
+    parser.add_argument('--map-path', '-m', help='Path to policy map YAML', default=None)
     return parser.parse_args()
+
 
 if __name__ == '__main__':
     sys.exit(main())
