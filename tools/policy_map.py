@@ -23,17 +23,17 @@ class PolicyMap(object):
         return definition_files
 
     def scopes(self):
-        return [{'id': s['id'], 'name': s['name']} for s in self.policy_map['scopes']]
+        return [s['id'] for s in self.policy_map['scopes']]
 
     def definitions(self, scope_id):
-        definition_lists = [s['definitions'] for s in self.policy_map['scopes'] if s['id'] == scope_id]
+        definition_lists = [s['definitions'] for s in self.policy_map['scopes'] if s == scope_id]
         definitions = [os.path.join(self.definition_path, i['name'] + '.json')
                        for a in definition_lists for i in a]
 
         return definitions
 
     def assignments(self, scope_id):
-        assignment_lists = [s['assignments'] for s in self.policy_map['scopes'] if s['id'] == scope_id]
+        assignment_lists = [s['assignments'] for s in self.policy_map['scopes'] if s == scope_id]
         assignments = [
             {'definition': os.path.join(self.definition_path, i['name'] + '.json'),
              'parameters': i.get('parameters', {})}
@@ -44,4 +44,22 @@ class PolicyMap(object):
     def tests(self):
         pass
 
+    @staticmethod
+    def is_management_group(scope_id):
+        return '/managementGroups' in scope_id
 
+    @staticmethod
+    def sub_id_from_scope(scope_id):
+        return filter(None, scope_id.split('/'))[1]
+
+    @staticmethod
+    def subscription_id(scope_id):
+        if not PolicyMap.is_management_group(scope_id):
+            return PolicyMap.sub_id_from_scope(scope_id)
+        return None
+
+    @staticmethod
+    def management_group_id(scope_id):
+        if PolicyMap.is_management_group(scope_id):
+            return PolicyMap.sub_id_from_scope(scope_id)
+        return None

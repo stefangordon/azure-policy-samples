@@ -1,8 +1,14 @@
 scopes:
-  - name: Test Subscription
-    id: ea42f556-5106-4743-99b0-c129bfa71a47
+  - name: Test Management Group
+    id: /managementGroups/2a6b40d9-16cb-4676-8609-d5a1df110803
     definitions:
       - name: Microsoft.Storage/require-secure-transfer
+      - name: Microsoft.Storage/deny-unrestricted-access
     assignments:
       - name: Microsoft.Storage/require-secure-transfer
+      - name: Microsoft.Storage/deny-unrestricted-access
 
+  - name: Test Resource Group
+    id: /subscriptions/ea5b40d9-16cb-4676-8609-d4a1df110803/resourceGroups/policy_test
+    assignments:
+      - name: Microsoft.Storage/require-secure-transfer

@@ -6,23 +6,28 @@ from azure.mgmt.resource.policy import PolicyClient
 
 class PolicyModule(ModuleBase):
 
-    def __init__(self, subscription_id):
-        self.subscription_id = subscription_id
+    def __init__(self, subscription_id, management_group_id):
         self.credentials = self.get_credentials()
-        self.client = PolicyClient(self.credentials, self.subscription_id)
+        self.client = None
+        self.subscription_id = subscription_id
+        self.management_group_id = management_group_id
         self.logger = logging.getLogger(__name__)
 
-    def deploy(self, policy_path, management_group_id):
+        if management_group_id:
+            self.client = PolicyClient(self.credentials, "not applicable")
+        else:
+            self.client = PolicyClient(self.credentials, self.subscription_id)
+
+    def deploy(self, policy_path):
         try:
-            policy_path = os.path.join(os.getcwd(), policy_path)
-            policy_name = os.path.splitext(os.path.basename(policy_path))[0]
             policy_text = open(policy_path, 'r').read()
+            policy_name = os.path.splitext(os.path.basename(policy_path))[0]
             policy_definition = json.loads(policy_text)
 
-            if management_group_id is None:
+            if self.management_group_id is None:
                 self.__deploy_definition_to_subscription(policy_name, policy_definition)
             else:
-                self.__deploy_definition_to_management_group(policy_name, policy_definition, management_group_id)
+                self.__deploy_definition_to_management_group(policy_name, policy_definition, self.management_group_id)
 
         except Exception as ex:
             self._exception_handler(ex)
