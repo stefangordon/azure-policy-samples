@@ -1,0 +1,35 @@
+{
+    "properties": {
+      "displayName": "key Vault SKU",
+      "policyType": "Custom",
+      "description": "Prevents key vaults without premium SKU from being create",
+      "parameters": {
+        "keyVaultSKUs": {
+          "type": "Array",
+          "metadata": {
+            "description": "Allowed SKU",
+            "displayName": "Allowed SKU"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.KeyVault/vaults"
+            },
+            {
+              "not": {
+                "field": "Microsoft.KeyVault/vaults/sku.name",
+                "in": "[parameters('keyVaultSKUs')]"
+              }
+            }
+          ]
+        },
+        "then": {
+          "effect": "Deny"
+        }
+      }
+    }
+  }
