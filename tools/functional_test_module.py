@@ -1,12 +1,13 @@
 import json
 import os
-
 from enum import Enum
-from module_base import ModuleBase
-from policy_module import PolicyModule
+
 from azure.mgmt.resource.resources import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
 from msrestazure.azure_exceptions import CloudError
+
+from module_base import ModuleBase
+from policy import Policy
 
 
 class DeploymentResult(Enum):
@@ -21,7 +22,7 @@ class FunctionalTestModule(ModuleBase):
         self.credentials = self.get_credentials()
         self.client = ResourceManagementClient(
             self.credentials, self.subscription_id)
-        self.policy = PolicyModule(self.subscription_id)
+        self.policy = Policy(self.subscription_id)
 
     def run(self, policy_path):
         # example policy_path: 'definitions/Microsoft.Storage/deny-unrestricted-access.json'

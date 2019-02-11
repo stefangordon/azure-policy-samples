@@ -1,6 +1,7 @@
 import logging
 
-class PolicyLoggerModule(object):
+
+class PolicyLogger(object):
     def __init__(self, name):
         self.name = name
         self.logger = logging.getLogger(__name__)

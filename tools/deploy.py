@@ -3,7 +3,7 @@
 """Run modules end to end
 """
 
-from policy_module import PolicyModule
+from policy import Policy
 from policy_map import PolicyMap
 
 import sys
@@ -15,20 +15,26 @@ def main():
 
     policy_map = PolicyMap(args.map_path, args.definition_path, args.test_path)
 
-    # Iterate over scopes
+    # Iterate over scopes to deploy
     for scope in policy_map.scopes():
-        print("Processing Scope: %s" % scope)
+        print("Deploying definitions for scope: %s" % scope)
 
         # Definitions required for this scope
         for definition in policy_map.definitions(scope):
             print("Processing Definition: %s" % definition)
-            policy = PolicyModule(PolicyMap.subscription_id(scope), PolicyMap.management_group_id(scope))
-            policy.deploy(definition)
+            policy = Policy(PolicyMap.subscription_id(scope), PolicyMap.management_group_id(scope))
+            policy_map.update_deployed(**policy.deploy(definition))
+
+    # Iterate over scopes to assign
+    for scope in policy_map.scopes():
+        print("Deploying assignments for scope: %s" % scope)
 
         # Assignments required for this scope
         for assignment in policy_map.assignments(scope):
             print("Processing Assignment %s with parameters %s" %
-                  (assignment['definition'], assignment['parameters']))
+                  (assignment['definition_name'], assignment['parameters']))
+            policy = Policy(PolicyMap.subscription_id(scope), PolicyMap.management_group_id(scope))
+            policy.assign(scope, **assignment)
 
 
 def process_arguments():
