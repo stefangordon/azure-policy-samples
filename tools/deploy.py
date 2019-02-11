@@ -17,14 +17,16 @@ def main():
 
     # Iterate over scopes
     for scope in policy_map.scopes():
-        print("Processing Scope: %s" % scope['name'])
+        print("Processing Scope: %s" % scope)
 
         # Definitions required for this scope
-        for definition in policy_map.definitions(scope['id']):
+        for definition in policy_map.definitions(scope):
             print("Processing Definition: %s" % definition)
+            policy = PolicyModule(PolicyMap.subscription_id(scope), PolicyMap.management_group_id(scope))
+            policy.deploy(definition)
 
         # Assignments required for this scope
-        for assignment in policy_map.assignments(scope['id']):
+        for assignment in policy_map.assignments(scope):
             print("Processing Assignment %s with parameters %s" %
                   (assignment['definition'], assignment['parameters']))
 
