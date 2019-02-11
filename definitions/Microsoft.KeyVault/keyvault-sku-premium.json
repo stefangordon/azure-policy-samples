@@ -1,11 +1,12 @@
 {
     "properties": {
-      "displayName": "key Vault SKU",
+      "displayName": "Policy to Approve SKU for Key Vault",
       "policyType": "Custom",
-      "description": "Prevents creation of key vaults without premium SKU",
+      "description": "Prevents creation of key vaults without specified SKU",
       "parameters": {
         "keyVaultSKUs": {
           "type": "Array",
+          "defaultValue": "westus2",
           "metadata": {
             "description": "Allowed SKU",
             "displayName": "Allowed SKU"

@@ -3,15 +3,18 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "testName": {
-            "defaultValue": "testName",
-            "type": "String"
+            "defaultValue": "key-vault-sku",
+            "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "nameSeed": "[concat(resourceGroup().id, parameters('testName'))]",
+        "keyVaultName": "[take(uniqueString(variables('nameSeed')), 24)]"
+    },
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
-            "name": "[parameters('testName')]",
+            "name": "[variables('keyVaultName')]",
             "apiVersion": "2016-10-01",
             "location": "[resourceGroup().location]",
             "tags": {},
@@ -22,23 +25,7 @@
                     "name": "Premium"
                 },
                 "tenantId": "[subscription().tenantId]",
-                "accessPolicies": [
-                    {
-                        "tenantId": "[subscription().tenantId]",
-                        "objectId": "[subscription().subscriptionId]",
-                        "permissions": {
-                            "keys": [
-                                "all"
-                            ],
-                            "secrets": [
-                                "all"
-                            ],
-                            "certificates": [
-                                "all"
-                            ]
-                        }
-                    }
-                ],
+                "accessPolicies": [],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false
