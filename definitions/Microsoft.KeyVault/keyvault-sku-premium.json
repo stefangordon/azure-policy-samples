@@ -1,0 +1,36 @@
+{
+    "properties": {
+      "displayName": "Policy to Approve SKU for Key Vault",
+      "policyType": "Custom",
+      "description": "Prevents creation of key vaults without specified SKU",
+      "parameters": {
+        "keyVaultSKUs": {
+          "type": "Array",
+          "defaultValue": "westus2",
+          "metadata": {
+            "description": "Allowed SKU",
+            "displayName": "Allowed SKU"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.KeyVault/vaults"
+            },
+            {
+              "not": {
+                "field": "Microsoft.KeyVault/vaults/sku.name",
+                "in": "[parameters('keyVaultSKUs')]"
+              }
+            }
+          ]
+        },
+        "then": {
+          "effect": "Deny"
+        }
+      }
+    }
+  }
