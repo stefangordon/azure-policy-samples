@@ -2,6 +2,7 @@ import json
 import os
 import logging
 from module_base import ModuleBase
+from policy_logger import PolicyLoggerModule
 from azure.mgmt.resource.policy import PolicyClient
 
 class PolicyModule(ModuleBase):
@@ -12,7 +13,8 @@ class PolicyModule(ModuleBase):
         self.subscription_id = subscription_id
         self.management_group_id = management_group_id
         self.logger = logging.getLogger(__name__)
-
+        
+        # SDK incorrectly requires subscription ID to have a value
         if management_group_id:
             self.client = PolicyClient(self.credentials, "not applicable")
         else:
@@ -25,12 +27,12 @@ class PolicyModule(ModuleBase):
             policy_definition = json.loads(policy_text)
 
             if self.management_group_id is None:
-                self.__deploy_definition_to_subscription(policy_name, policy_definition)
+                self._deploy_definition_to_subscription(policy_name, policy_definition)
             else:
-                self.__deploy_definition_to_management_group(policy_name, policy_definition, self.management_group_id)
+                self._deploy_definition_to_management_group(policy_name, policy_definition, self.management_group_id)
 
         except Exception as ex:
-            self._exception_handler(ex)
+            self.logger.exception_handler(ex)
 
     def assign(self, assignment_path, scope):
         try:
@@ -41,7 +43,7 @@ class PolicyModule(ModuleBase):
 
             self._assign_policy_to_scope(assignment_name, scope, assignment_definition)
         except Exception as ex:
-            self._exception_handler(ex)
+            self.logger.exception_handler(ex)
 
     def _deploy_definition_to_subscription(self, policy_name, policy_definition):
         self.client.policy_definitions.create_or_update(policy_name, policy_definition)
@@ -51,9 +53,6 @@ class PolicyModule(ModuleBase):
 
     def _assign_policy_to_scope(self, assignment_name, scope, assignment_definition):
         self.client.policy_assignments.create(scope, assignment_name, assignment_definition)
-
-    def _exception_handler(self, exception):
-        self.logger.warning(exception)
 
     def list_policies(self):
         print('list')
