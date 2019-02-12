@@ -3,3 +3,4 @@ pylint
 azure-cli-profile
 pep8
 autopep8
+pytest

@@ -9,6 +9,20 @@ Then create your policy map YAML file.
 # python3 -m E:\azure-policy-samples\map.yml -d E:\azure-policy-samples\definitions -t E:\azure-policy-samples\tests
 ``` 
 
+## Testing a policy definition
+
+
+Establish credentials with either `az login` or setting environment variables.
+
+```bash
+# run all tests for all policies
+cd tools/test
+pytest --subscription_id=<subid>
+
+# run all tests for a single policy
+pytest --subscription_id=<subid> --policy='Microsoft.Storage/deny-unrestricted-access.json'
+```
+
 ## For defining a policy in a subscription
 
 ```

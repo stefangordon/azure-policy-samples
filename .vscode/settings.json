@@ -2,6 +2,15 @@
     "python.pythonPath": ".venv/bin/python",
     "python.linting.enabled": true,
     "python.envFile": "${workspaceFolder}/dev.env",
+    "python.unitTest.pyTestEnabled": true,
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.pyTestArgs": [
+        "--subscription_id='<subid>'",
+        // "--policy='Microsoft.Storage/require-secure-transfer.json'",     //example for testing a single policy
+        "-v"
+    ],
+    "python.unitTest.cwd": "${workspaceFolder}/tools/test",
     "[python]": {
         "editor.formatOnSave": true,
     }
