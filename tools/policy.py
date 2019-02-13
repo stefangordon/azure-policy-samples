@@ -48,7 +48,7 @@ class Policy(ModuleBase):
         except Exception as ex:
             self.logger.exception_handler(ex)
 
-    def assign(self, scope, definition_name, definition_id, parameters):
+    def assign(self, scope, definition_name, definition_id, parameters, exclusions):
         try:
             name = "Assignment for " + definition_name
             assignment = {
@@ -58,7 +58,8 @@ class Policy(ModuleBase):
               },
              "parameters": parameters,
              "policyDefinitionId": definition_id,
-             "scope": scope
+             "scope": scope,
+             "not_scopes": exclusions
             }
             self._assign_policy_to_scope(scope, name, assignment)
         except Exception as ex:
