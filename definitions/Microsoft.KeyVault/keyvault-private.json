@@ -1,0 +1,47 @@
+{
+  "properties": {
+    "displayName": "Policy to to check key vault matches vnet network rules",
+    "policyType": "Custom",
+    "description": "Ensures that keys : 1) Have vnet network rules 2) Deny all traffic by default 3) Make exceptions to approved vnets ",
+    "parameters": {
+      "approvedVNETs": {
+        "type": "Array",
+        "metadata": {
+          "defaultValue": "approved-vnet",
+          "displayName": "Approved VNETS"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.KeyVault/vaults"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.KeyVault/vaults/networkAcls.virtualNetworkRules[*].id",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.KeyVault/vaults/networkAcls.defaultAction",
+                "equals": "Allow"
+              },
+              {
+                "not": {
+                  "field": "Microsoft.Keyvault/vaults/networkAcls.virtualNetworkRules[*].id",
+                  "in": "[parameters('approvedVNETs')]"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}
