@@ -1,12 +1,12 @@
 # Azure Policy Samples
 Azure Policy samples I put together which may be useful to others.
 
-## To use deploy.sh
+## To use deploy.py
 Establish credentials with either `az login` or setting environment variables.
 Then create your policy map YAML file.
 
 ```
-# python3 -m E:\azure-policy-samples\map.yml -d E:\azure-policy-samples\definitions -t E:\azure-policy-samples\tests
+# python3 deploy.py -m E:\azure-policy-samples\map.yml -d E:\azure-policy-samples\definitions -t E:\azure-policy-samples\tests
 ``` 
 
 ## For defining a policy in a subscription
