@@ -38,11 +38,14 @@ class PolicyMap(object):
         assignments = [
             {'definition_id': self.get_definition_id(i['name']),
              'definition_name': i['name'],
-             'parameters': i.get('parameters', {}),
+             'parameters': self._augment_parameters(i.get('parameters', {})),
              'exclusions': i.get('exclusions')}
             for a in assignment_lists for i in a]
 
         return assignments
+
+    def _augment_parameters(self, parameters):
+        return {k: {'value': v} for k,v in parameters.items()}
 
     def tests(self):
         pass
