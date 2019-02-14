@@ -4,6 +4,7 @@ scopes:
     definitions:
       - name: Microsoft.Storage/require-secure-transfer
       - name: Microsoft.Storage/deny-unrestricted-access
+      - name: Microsoft.Storage/encrypt-with-customer-keys
     assignments:
       - name: Microsoft.Storage/require-secure-transfer
       - name: Microsoft.Storage/deny-unrestricted-access
@@ -12,3 +13,9 @@ scopes:
     id: /subscriptions/ea5b40d9-16cb-4676-8609-d4a1df110803/resourceGroups/policy_test
     assignments:
       - name: Microsoft.Storage/require-secure-transfer
+      - name: Microsoft.Storage/encrypt-with-customer-keys
+        parameters:
+          keyName: testKeyName
+          keyVaultURI: https://testVaultURI
+        exclusions:
+          - /subscriptions/ea5b40d9-16cb-4676-8609-d4a1df110803/resourceGroups/policy_test/providers/Microsoft.Storage/storageAccounts/teststorage

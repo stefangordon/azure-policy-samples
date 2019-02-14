@@ -27,21 +27,25 @@ class PolicyMap(object):
         return [s['id'] for s in self.policy_map['scopes']]
 
     def definitions(self, scope_id):
-        definition_lists = [s['definitions'] for s in self.policy_map['scopes'] if s['id'] == scope_id]
+        definition_lists = [s['definitions'] for s in self.policy_map['scopes'] if s['id'] == scope_id and s.get('definitions') != None]
         definitions = [os.path.join(self.definition_path, i['name'] + '.json')
                        for a in definition_lists for i in a]
 
         return definitions
 
     def assignments(self, scope_id):
-        assignment_lists = [s['assignments'] for s in self.policy_map['scopes'] if s['id'] == scope_id]
+        assignment_lists = [s['assignments'] for s in self.policy_map['scopes'] if s['id'] == scope_id and s.get('assignments') != None]
         assignments = [
             {'definition_id': self.get_definition_id(i['name']),
              'definition_name': i['name'],
-             'parameters': i.get('parameters', {})}
+             'parameters': self._augment_parameters(i.get('parameters', {})),
+             'exclusions': i.get('exclusions')}
             for a in assignment_lists for i in a]
 
         return assignments
+
+    def _augment_parameters(self, parameters):
+        return {k: {'value': v} for k,v in parameters.items()}
 
     def tests(self):
         pass
