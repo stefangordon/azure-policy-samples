@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "testName": {
+            "defaultValue": "key-vault",
+            "type": "string"
+        },
+        "test_vn": {
+            "defaultValue": "allowed-vnet",
+            "type": "string"
+        },
+        "test_subnet": {
+            "defaultValue": "default",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "nameSeed": "[concat(resourceGroup().id, parameters('testName'))]",
+        "keyVaultName": "[take(uniqueString(variables('nameSeed')), 24)]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "name": "[variables('keyVaultName')]",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Premium"
+                },
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": [],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "virtualNetworkRules": [
+                      {
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('test_vn')), '/subnets/',parameters('test_subnet'))]",
+                        "action": "Allow"
+                      }
+                    ]
+                  }
+            },
+            "dependsOn": []
+        }
+    ]
+}
