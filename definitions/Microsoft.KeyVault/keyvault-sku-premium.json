@@ -6,7 +6,7 @@
       "parameters": {
         "keyVaultSKUs": {
           "type": "Array",
-          "defaultValue": "westus2",
+          "defaultValue": "Premium",
           "metadata": {
             "description": "Allowed SKU",
             "displayName": "Allowed SKU"
