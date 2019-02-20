@@ -7,6 +7,7 @@ except Exception:
 
 import os
 
+
 class ModuleBase(object):
 
     ENV_TENANT_ID = 'AZURE_TENANT_ID'
@@ -21,6 +22,7 @@ class ModuleBase(object):
             ModuleBase.ENV_CLIENT_SECRET
         ]
 
+        self._is_cli_auth = False
         if all(k in os.environ for k in tenant_auth_variables):
             # Service principal authentication
             credentials = ServicePrincipalCredentials(
@@ -34,5 +36,11 @@ class ModuleBase(object):
              subscription_id,
              tenant_id) = Profile().get_login_credentials(
                 resource=resource)
+            self._is_cli_auth = True
 
         return credentials
+
+    def _get_access_token(self, credentials):
+        if self._is_cli_auth:
+            return credentials._token_retriever()[1]
+        return credentials.token['access_token']
