@@ -1,0 +1,43 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "storageAccountName": "mystorage"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "encryption": {
+                    "keySource": "Microsoft.Storage",
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    }
+                },
+                "networkAcls": {
+                    "bypass": "None",
+                    "defaultAction": "Deny"
+                },
+                "supportsHttpsTrafficOnly": true
+            }
+        }
+    ],
+    "outputs": {}
+}

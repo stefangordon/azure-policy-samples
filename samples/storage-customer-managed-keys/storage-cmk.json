@@ -1,0 +1,50 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "storageAccountName": "mystorage"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "encryption": {
+                    "keySource": "Microsoft.Keyvault",
+                    "keyvaultproperties": {
+                        "keyname": "mykey",
+                        "keyvaulturi": "https://myvault.vault.azure.net",
+                        "keyversion": "b70f20e8de214922aa8e5cf724042904"
+                    },
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    }
+                },
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Allow",
+                    "ipRules": [],
+                    "virtualNetworkRules": []
+                },
+                "supportsHttpsTrafficOnly": true
+            }
+        }
+    ],
+    "outputs": {}
+}

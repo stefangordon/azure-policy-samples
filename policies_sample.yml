@@ -1,19 +1,40 @@
 scopes:
   - name: Test Management Group
-    id: /managementGroups/2a6b40d9-16cb-4676-8609-d5a1df110803
+    id: /managementGroups/nobun
     definitions:
       - name: Microsoft.Storage/require-secure-transfer
       - name: Microsoft.Storage/deny-unrestricted-access
       - name: Microsoft.Storage/encrypt-with-customer-keys
+      - name: Microsoft.Storage/encrypt-with-customer-keys-provisioning
     assignments:
       - name: Microsoft.Storage/require-secure-transfer
       - name: Microsoft.Storage/deny-unrestricted-access
 
+  - name: Test Subscription
+    id: /subscriptions/6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b
+    assignments:
+      # Require customer-managed keys for the entire subscription, except the 'storage-provisioning' resource group
+      # 1. Storage accounts should be created here
+      # 2. Upgrade from Microsoft to Customer Managed Keys
+      # 3. Moved to its final destination (ex: `az resource move`)
+      - name: Microsoft.Storage/encrypt-with-customer-keys
+        parameters:
+          keyName: testKeyName
+          keyVaultURI: https://testVaultURI
+        exclusions: - /subscriptions/ea5b40d9-16cb-4676-8609-d4a1df110803/resourceGroups/storage-provisioning
+
+  - name: Storage Account Provisioning Resource Group
+    id: /subscriptions/6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b/resourceGroups/storage-provisioning
+    assignments:
+      - name: Microsoft.Storage/encrypt-with-customer-keys-provisioning
+      parameters:
+          keyName: testKeyName
+          keyVaultURI: https://testVaultURI
+
   - name: Test Resource Group
-    id: /subscriptions/ea5b40d9-16cb-4676-8609-d4a1df110803/resourceGroups/policy_test
+    id: /subscriptions/6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b
     assignments:
       - name: Microsoft.Storage/require-secure-transfer
-      - name: Microsoft.Storage/encrypt-with-customer-keys
         parameters:
           keyName: testKeyName
           keyVaultURI: https://testVaultURI

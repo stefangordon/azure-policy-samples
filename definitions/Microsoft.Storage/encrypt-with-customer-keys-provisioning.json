@@ -1,0 +1,78 @@
+{
+    "properties": {
+        "displayName": "Require Storage Encryption with Customer Keys OR ensure all access is denied",
+        "description": "Prevents creation of Storage Account without encryption with Customer Managed Keys from Key Vault unless all network access is denied. To be used when provisioning a new storage account prior from its upgrade from Microsoft-managed keys to Customer Managed Keys.",
+        "mode": "All",
+        "parameters": {
+            "keyVaultURI": {
+                "type": "string",
+                "metadata": {
+                    "description": "e.g. 'https://myvault.vault.azure.net'"
+                }
+            },
+            "keyName": {
+                "type": "string",
+                "metadata": {
+                    "description": "e.g. 'mykey'"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                                    "equals": "Deny"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.bypass",
+                                    "equals": "None"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.ipRules",
+                                    "exists": "false"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.virtualNetworkRules",
+                                    "exists": "false"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/enableFileEncryption",
+                                    "equals": "true"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/enableBlobEncryption",
+                                    "equals": "true"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.keyvaultproperties.keyvaulturi",
+                                    "equals": "[parameters('keyVaultURI')]"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.keyvaultproperties.keyname",
+                                    "equals": "[parameters('keyName')]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}
