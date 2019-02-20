@@ -28,7 +28,7 @@ def pytest_generate_tests(metafunc):
 
         test_cases = []
         for p in policies:
-            tests = [(subscription_id, p, t[0], t[1])
+            tests = [(subscription_id, '{}/{}'.format(definitions, p), t[0], t[1])
                      for t in FunctionalTest.discover_tests(definitions, p)]
             test_cases += tests
         metafunc.parametrize(
