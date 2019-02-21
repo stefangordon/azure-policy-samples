@@ -1,0 +1,34 @@
+pool:
+  vmImage: ubuntu-16.04
+
+variables:
+  azureSubscription: 'TE Account - NoBun (6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b)'
+
+steps:
+- task: UsePythonVersion@0
+  displayName: Use Python 3.6
+  inputs:
+    versionSpec: 3.6
+
+- script: |
+    pip install -r tools/requirements.dev.txt
+  displayName: Install dependencies
+
+# Using AzureCLI to take advantage of CLI auth via Service Connection
+- task: AzureCLI@1
+  displayName: Run pytest
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptLocation: inlineScript
+    workingDirectory: tools/test
+    inlineScript: |
+      set -euo pipefail
+      SUB_ID=$(az account show --query id -o tsv)
+      pytest --subscription_id=$SUB_ID --junitxml=$(Build.StagingDirectory)/functional_test.xml -v
+
+- task: PublishTestResults@2
+  displayName: Publish test results
+  condition: always()
+  inputs:
+    testResultsFiles: '$(Build.StagingDirectory)/functional_test.xml'
+    testRunTitle: functional_test
