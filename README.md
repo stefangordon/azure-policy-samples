@@ -9,19 +9,21 @@ Then create your policy map YAML file.
 # python3 deploy.py -m E:\azure-policy-samples\map.yml -d E:\azure-policy-samples\definitions -t E:\azure-policy-samples\tests
 ``` 
 
-## For defining a policy in a subscription
+## Tips for general manual policy development (unrelated to automated deployment tool)
+
+### For defining a policy in a subscription
 
 ```
 # ARMClient.exe PUT "/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/policyDefinitions/AuditStorageAccounts?api-version=2016-12-01" @<path to policy definition JSON file>
 ```
 
-## For defining a policy in a management group
+### For defining a policy in a management group
 
 ```
 # ARMClient.exe PUT "/providers/Microsoft.Management/managementgroups/{managementGroupId}/providers/Microsoft.Authorization/policyDefinitions/AuditStorageAccounts?api-version=2016-12-01" @<path to policy definition JSON file>
 ```
 
-## Force an on-demand policy evaluation
+### Force an on-demand policy evaluation
 Use ARM client with the command below to scan an specific resource group.  
 
 ```
