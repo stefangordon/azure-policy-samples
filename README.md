@@ -2,8 +2,28 @@
 Azure Policy samples I put together which may be useful to others.
 
 ## To use deploy.py
+
+Install dependencies
+
+```
+pip install -r tools\requirements.txt
+```
+
 Establish credentials with either `az login` or setting environment variables.
-Then create your policy map YAML file.
+
+If you `az login` the tool will attempt to use your credentials from Azure CLI automatically.
+
+If you choose to use a Service Principal with environment variables follow https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal
+and then create variables as such
+
+```
+AZURE_TENANT_ID=tenant
+AZURE_CLIENT_ID=appId
+AZURE_CLIENT_SECRET=password
+```
+
+
+Then create your policy map YAML file.  You can use the `policies_sample.yml` as a base.
 
 ```
 # python3 deploy.py -m E:\azure-policy-samples\map.yml -d E:\azure-policy-samples\definitions -t E:\azure-policy-samples\tests
