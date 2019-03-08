@@ -50,7 +50,7 @@ class Policy(ModuleBase):
 
     def assign(self, scope, definition_name, definition_id, parameters, exclusions):
         try:
-            name = "Assignment for " + definition_name
+            name = "Assignment for " + definition_name.rsplit('/', 1)[-1]
             assignment = {
              "displayName": name,
              "metadata": {
