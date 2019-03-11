@@ -1,0 +1,19 @@
+version: '3'
+services:
+  compliance:
+    build: .
+    container_name: "compliance_python"
+    restart: always
+    ports:
+     - "8080:80"
+    environment:
+     - AzureWebJobsStorage=DefaultEndpointsProtocol=https;AccountName=fake;AccountKey=key;EndpointSuffix=core.windows.net
+     - AZURE_MGMT_GROUP_ID=/providers/Microsoft.Management/managementGroups/YOUR_GROUP_NAME
+     - AZURE_CLIENT_ID=
+     - AZURE_TENANT_ID=
+     - AZURE_CLIENT_SECRET=
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024k"
+        max-file: "10"

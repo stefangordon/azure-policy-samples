@@ -1,0 +1,13 @@
+{
+  "azureFunctions.projectRuntime": "~2",
+  "azureFunctions.projectLanguage": "Python",
+  "azureFunctions.templateFilter": "Verified",
+  "azureFunctions.deploySubpath": "compliance_functions_python.zip",
+  "azureFunctions.preDeployTask": "func: pack",
+  "files.exclude": {
+    "obj": true,
+    "bin": true
+  },
+  "azureFunctions.pythonVenv": ".env",
+  "debug.internalConsoleOptions": "neverOpen"
+}

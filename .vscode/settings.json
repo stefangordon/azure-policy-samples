@@ -4,5 +4,7 @@
     "python.envFile": "${workspaceFolder}/dev.env",
     "[python]": {
         "editor.formatOnSave": true,
-    }
+    },
+    "azureFunctions.projectLanguage": "Python",
+    "azureFunctions.projectRuntime": "~2"
 }

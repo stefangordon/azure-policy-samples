@@ -1,0 +1,19 @@
+version: '3'
+services:
+  compliance:
+    build: .
+    container_name: "compliance_functions"
+    restart: always
+    ports:
+     - "8080:80"
+    environment:
+     - AzureWebJobsStorage=DefaultEndpointsProtocol=https;AccountName=<account>;AccountKey=<key>
+     - AZURE_MGMT_GROUP_ID=/providers/Microsoft.Management/managementGroups/<mgmt group name>
+     - AZURE_CLIENT_ID=<client id>
+     - AZURE_TENANT_ID=<tenant id>
+     - AZURE_SECRET=<secret>
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024k"
+        max-file: "10"
