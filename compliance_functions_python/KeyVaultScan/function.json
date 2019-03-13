@@ -5,8 +5,8 @@
       "name": "mytimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 0 * * * *",
-      "runOnStartup123": true
+      "schedule": "0 0 1 * * *",
+      "runOnStartup": true
     }
   ]
 }

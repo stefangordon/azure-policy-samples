@@ -9,3 +9,4 @@ azure-common
 azure-mgmt-keyvault
 azure-keyvault
 requests
+azure-storage-blob

@@ -9,5 +9,6 @@
     "bin": true
   },
   "azureFunctions.pythonVenv": ".env",
-  "debug.internalConsoleOptions": "neverOpen"
+  "debug.internalConsoleOptions": "neverOpen",
+  "python.pythonPath": ".env\\Scripts\\python.exe"
 }
