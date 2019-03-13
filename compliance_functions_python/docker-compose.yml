@@ -9,9 +9,13 @@ services:
     environment:
      - AzureWebJobsStorage=DefaultEndpointsProtocol=https;AccountName=fake;AccountKey=key;EndpointSuffix=core.windows.net
      - AZURE_MGMT_GROUP_ID=/providers/Microsoft.Management/managementGroups/YOUR_GROUP_NAME
+     # For service principal auth
      - AZURE_CLIENT_ID=
      - AZURE_TENANT_ID=
      - AZURE_CLIENT_SECRET=
+     # For credential auth
+     #- AZURE_USERNAME=
+     #- AZURE_PASSWORD=
     logging:
       driver: "json-file"
       options:
