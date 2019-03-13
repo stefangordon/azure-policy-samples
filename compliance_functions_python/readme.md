@@ -21,6 +21,8 @@ First, update the environment variables in the supplied `docker-compose.yml`.
 
 The `AzureWebJobsStorage` connection string will be used for logs and as a location to write output from the functions.
 
+_All commands assume you are in the compliance_functions_python folder_
+
 To ensure your containers are built fresh you can run:
 ```
 docker-compose up --build
