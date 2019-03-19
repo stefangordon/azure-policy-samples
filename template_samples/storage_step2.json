@@ -1,0 +1,66 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyvaultname": {
+            "type": "string"
+        },
+        "keyname": {
+            "type": "string"
+        },
+        "keyversion": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of storage account."
+            }
+        }
+    },
+    "variables": {
+        "identity_resource_id": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '/providers/Microsoft.ManagedIdentity/Identities/default')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "encryption": {
+                    "keySource": "Microsoft.Keyvault",
+                    "keyvaultproperties": {
+                        "keyname": "[parameters('keyname')]",
+                        "keyvaulturi": "[concat('https://', parameters('keyvaultname'), '.vault.azure.net')]",
+                        "keyversion": "[parameters('keyversion')]"
+                    },
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    }
+                },
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Deny",
+                    "ipRules": [],
+                    "virtualNetworkRules": []
+                },
+                "supportsHttpsTrafficOnly": true
+            }
+        }
+    ],
+    "outputs": {}
+}
