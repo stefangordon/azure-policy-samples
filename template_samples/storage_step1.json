@@ -1,0 +1,75 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyvaultname": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of storage account."
+            }
+        }
+    },
+    "variables": {
+        "identity_resource_id": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '/providers/Microsoft.ManagedIdentity/Identities/default')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-07-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "encryption": {
+                    "keySource": "Microsoft.Storage",
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    }
+                },
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Deny"
+                },
+                "supportsHttpsTrafficOnly": true
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+            "name": "[concat(parameters('keyvaultname'), '/add')]",
+            "apiVersion": "2018-02-14",
+            "properties": {
+              "accessPolicies": [
+                {
+                  "tenantId": "[reference(variables('identity_resource_id'), '2015-08-31-PREVIEW').tenantId]",
+                  "objectId": "[reference(variables('identity_resource_id'), '2015-08-31-PREVIEW').principalId]",
+                  "permissions": {
+                    "keys": [
+                        "Get",
+                        "WrapKey",
+                        "UnwrapKey"
+                    ]
+                  }
+                }
+              ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+          }
+    ]
+}
